@@ -64,11 +64,12 @@ int get_min_index(const int numbers[], const size_t element_count) {
 }
 
 int is_all_positive(const int numbers[], const size_t element_count) {
+    size_t i;
+    int is_positive = TRUE;
+
     if (element_count == 0) {
         return FALSE;
     }
-    int is_positive = TRUE;
-    size_t i;
     for (i = 0; i < element_count; i++) {
         if (numbers[i] == INT_MIN) {
             break;

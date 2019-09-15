@@ -62,15 +62,15 @@ int get_color(const size_t row, const size_t col)
     }
 
     switch (s_board[row][col]) {
-        case COLOR_BLACK:
-            color = COLOR_BLACK;
-            break;
-        case COLOR_WHITE:
-            color = COLOR_WHITE;
-            break;
-        default:
-            color = -1;
-            break;
+    case COLOR_BLACK:
+        color = COLOR_BLACK;
+        break;
+    case COLOR_WHITE:
+        color = COLOR_WHITE;
+        break;
+    default:
+        color = -1;
+        break;
     }
     return color;
 }

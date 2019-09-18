@@ -304,7 +304,7 @@ int insert_column(const color_t color, const size_t col)
 
     for (i = s_col_count; i >= col; i--) {
         for (j = 0; j < s_row_count; j++) {
-            s_board[j][i + 1] = s_board[i][j];
+            s_board[j][i + 1] = s_board[j][i];
         }
         if (i == 0) {
             break;
@@ -449,4 +449,3 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
     change_score(color, -COPY_SKILL_POINT);
     return TRUE;
 }
-

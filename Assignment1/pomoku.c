@@ -316,7 +316,7 @@ int insert_column(const color_t color, const size_t col)
     }
 
     change_score(color, -INSERT_AND_REMOVE_SKILL_POINT);
-    s_row_count++;
+    s_col_count++;
     return TRUE;
 }
 
@@ -367,6 +367,10 @@ int swap_rows(const color_t color, const size_t row0, size_t const row1)
     int temp;
     size_t i;
 
+    if (row0 == row1) {
+        return FALSE;
+    }
+
     if (row0 >= s_row_count || row1 > s_row_count) {
         return FALSE;
     }
@@ -385,6 +389,10 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
 {
     int temp;
     size_t i;
+
+    if (col0 == col1) {
+        return FALSE;
+    }
 
     if (col0 >= s_col_count || col1 > s_col_count) {
         return FALSE;
@@ -405,6 +413,10 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
 
+    if (src == dst) {
+        return FALSE;
+    }
+
     if (src >= s_row_count || dst > s_row_count) {
         return FALSE;
     }
@@ -422,6 +434,10 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
 
+    if (src == dst) {
+        return FALSE;
+    }
+
     if (src >= s_col_count || dst > s_col_count) {
         return FALSE;
     }
@@ -433,3 +449,4 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
     change_score(color, -COPY_SKILL_POINT);
     return TRUE;
 }
+

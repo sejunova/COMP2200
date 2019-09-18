@@ -280,6 +280,9 @@ int insert_row(const color_t color, const size_t row)
         for (j = 0; j < s_col_count; j++) {
             s_board[i + 1][j] = s_board[i][j];
         }
+        if (i == 0) {
+            break;
+        }
     }
 
     for (j = 0; j < s_col_count; j++) {
@@ -302,6 +305,9 @@ int insert_column(const color_t color, const size_t col)
     for (i = s_col_count; i >= col; i--) {
         for (j = 0; j < s_row_count; j++) {
             s_board[j][i + 1] = s_board[i][j];
+        }
+        if (i == 0) {
+            break;
         }
     }
 

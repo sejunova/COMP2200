@@ -272,6 +272,7 @@ int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
+    return FALSE;
     if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row > s_row_count) {
         return FALSE;
     }
@@ -298,6 +299,7 @@ int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
+    return FALSE;
     if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col > s_col_count) {
         return FALSE;
     }

@@ -272,14 +272,13 @@ int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
-    return FALSE;
-    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row > s_row_count) {
+    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row >= s_row_count) {
         return FALSE;
     }
 
-    for (i = s_row_count; i >= row; i--) {
+    for (i = s_row_count - 1; i > row; i--) {
         for (j = 0; j < s_col_count; j++) {
-            s_board[i + 1][j] = s_board[i][j];
+            s_board[i][j] = s_board[i - 1][j];
         }
         if (i == 0) {
             break;
@@ -299,14 +298,13 @@ int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
-    return FALSE;
-    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col > s_col_count) {
+    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col >= s_col_count) {
         return FALSE;
     }
 
-    for (i = s_col_count; i >= col; i--) {
+    for (i = s_col_count - 1; i > col; i--) {
         for (j = 0; j < s_row_count; j++) {
-            s_board[j][i + 1] = s_board[j][i];
+            s_board[j][i] = s_board[j][i - 1];
         }
         if (i == 0) {
             break;
@@ -373,7 +371,7 @@ int swap_rows(const color_t color, const size_t row0, size_t const row1)
         return FALSE;
     }
 
-    if (row0 >= s_row_count || row1 > s_row_count) {
+    if (row0 >= s_row_count || row1 > s_row_count || get_score(color) < SWAP_SKILL_POINT) {
         return FALSE;
     }
 
@@ -396,7 +394,7 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
         return FALSE;
     }
 
-    if (col0 >= s_col_count || col1 > s_col_count) {
+    if (col0 >= s_col_count || col1 > s_col_count || get_score(color) < SWAP_SKILL_POINT) {
         return FALSE;
     }
 
@@ -419,7 +417,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
         return FALSE;
     }
 
-    if (src >= s_row_count || dst > s_row_count) {
+    if (src >= s_row_count || dst > s_row_count || get_score(color) < COPY_SKILL_POINT) {
         return FALSE;
     }
 
@@ -440,7 +438,7 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
         return FALSE;
     }
 
-    if (src >= s_col_count || dst > s_col_count) {
+    if (src >= s_col_count || dst > s_col_count || get_score(color) < COPY_SKILL_POINT) {
         return FALSE;
     }
 

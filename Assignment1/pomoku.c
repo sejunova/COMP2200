@@ -272,7 +272,7 @@ int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
-    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row >= s_row_count) {
+    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row >= s_row_count - 1) {
         return FALSE;
     }
 
@@ -298,7 +298,7 @@ int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
-    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col >= s_col_count) {
+    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col >= s_col_count - 1) {
         return FALSE;
     }
 
@@ -417,7 +417,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
         return FALSE;
     }
 
-    if (src >= s_row_count || dst > s_row_count || get_score(color) < COPY_SKILL_POINT) {
+    if (src >= s_row_count || dst >= s_row_count || get_score(color) < COPY_SKILL_POINT) {
         return FALSE;
     }
 
@@ -438,7 +438,7 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
         return FALSE;
     }
 
-    if (src >= s_col_count || dst > s_col_count || get_score(color) < COPY_SKILL_POINT) {
+    if (src >= s_col_count || dst >= s_col_count || get_score(color) < COPY_SKILL_POINT) {
         return FALSE;
     }
 

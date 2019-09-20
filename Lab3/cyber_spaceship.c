@@ -60,6 +60,12 @@ const char* get_longest_safe_zone_or_null(const char* const cluster_start_locati
             current_safe_zone_in_row++;
         }
     }
+
+    /* case all clusters are safe */
+    if (longest_cluster_length == 0 && current_safe_zone_in_row != 0) {
+        longest_cluster_length = current_safe_zone_in_row;
+        longest_safe_cluster_start = cluster_start;
+    }
     *out_longest_length = longest_cluster_length;
     return longest_safe_cluster_start;
 }

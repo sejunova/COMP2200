@@ -16,14 +16,14 @@ Cluster2    -------------------------
     size_t* out_longest_length_p = &out_longest_length;
     const char* longest_safe_cluster_start_address;
 
-    const char* cluster1 = &cyber_asteroid_belt[2];
-    const char* cluster2 = &cyber_asteroid_belt[4];
+    const char* cluster1 = &cyber_asteroid_belt[0];
+    const char* cluster2 = &cyber_asteroid_belt[0];
 
     cluster_start_addresses[0] = cluster1;
     cluster_start_addresses[1] = cluster2;
 
-    cluster_lengths[0] = 2U;
-    cluster_lengths[1] = 2U;
+    cluster_lengths[0] = 3U;
+    cluster_lengths[1] = 3U;
 
     longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cluster_start_addresses, cluster_lengths, 2, out_longest_length_p); /* longest_safe_cluster_start_address is (cyber_asteroid_belt + 3), out_longest_length: 9 */
 

@@ -51,21 +51,16 @@ const char* get_longest_safe_zone_or_null(const char* const cluster_start_locati
 
         /* case dangerous */
         if (zone_cluster_count % 2 == 0) {
-            if (current_safe_zone_in_row >= longest_cluster_length && current_safe_zone_in_row != 0) {
-                longest_cluster_length = current_safe_zone_in_row;
-                longest_safe_cluster_start = char_address - current_safe_zone_in_row;
-            }
             current_safe_zone_in_row = 0;
         } else {
             current_safe_zone_in_row++;
+            if (current_safe_zone_in_row >= longest_cluster_length) {
+                longest_cluster_length = current_safe_zone_in_row;
+                longest_safe_cluster_start = char_address - current_safe_zone_in_row + 1;
+            }
         }
     }
 
-    /* case all clusters are safe */
-    if (longest_cluster_length == 0 && current_safe_zone_in_row != 0) {
-        longest_cluster_length = current_safe_zone_in_row;
-        longest_safe_cluster_start = cluster_start;
-    }
     *out_longest_length = longest_cluster_length;
     return longest_safe_cluster_start;
 }

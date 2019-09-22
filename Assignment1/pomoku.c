@@ -401,7 +401,7 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
     for (i = 0; i < s_row_count; i++) {
         temp = s_board[i][col0];
         s_board[i][col0] = s_board[i][col1];
-        s_board[i][col0] = temp;
+        s_board[i][col1] = temp;
     }
 
     change_score(color, -SWAP_SKILL_POINT);

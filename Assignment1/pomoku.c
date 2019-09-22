@@ -272,7 +272,7 @@ int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
-    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT) {
+    if (s_row_count == ROW_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || row > s_row_count) {
         return FALSE;
     }
 
@@ -298,7 +298,7 @@ int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
-    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT) {
+    if (s_col_count == COLUMN_SIZE_MAX || get_score(color) < INSERT_AND_REMOVE_SKILL_POINT || col > s_col_count) {
         return FALSE;
     }
 
@@ -401,7 +401,7 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
     for (i = 0; i < s_row_count; i++) {
         temp = s_board[i][col0];
         s_board[i][col0] = s_board[i][col1];
-        s_board[col1][i] = temp;
+        s_board[i][col0] = temp;
     }
 
     change_score(color, -SWAP_SKILL_POINT);

@@ -119,6 +119,10 @@ char* tokenize(char* str, const char* delims)
     char* p;
     char* token_start;
     static char* s_token_start;
+
+    if (str == NULL && s_token_start == NULL) {
+        return NULL;
+    }
     if (str != NULL) {
         s_token_start = str;
     }

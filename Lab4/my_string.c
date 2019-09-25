@@ -57,7 +57,8 @@ void reverse(char* str)
     reverse_n(str, str_len);
 }
 
-int index_of(const char* str, const char* word) {
+int index_of(const char* str, const char* word)
+{
     int i;
     int str_len;
     int word_len;

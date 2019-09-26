@@ -69,7 +69,11 @@ int index_of(const char* str, const char* word)
     str_len = get_strlen_until_c(str, '\0');
     word_len = get_strlen_until_c(word, '\0');
 
-    if (str_len == 0 || word_len == 0 || word_len > str_len) {
+    if (word_len == 0) {
+        return 0;
+    }
+
+    if (word_len > str_len) {
         return -1;
     }
 

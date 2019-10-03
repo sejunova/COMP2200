@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "receipter.h"
 
-const char* s_menu_list[10];
-unsigned int s_order_num;
-double s_menu_price_list[10];
-const char* s_message;
-unsigned int s_menu_count = 0;
-double s_tip = 0;
+static const char* s_menu_list[10];
+static unsigned int s_order_num = 0;
+static double s_menu_price_list[10];
+static const char* s_message;
+static unsigned int s_menu_count = 0;
+static double s_tip = 0;
 
 int add_item(const char* name, double price)
 {
@@ -38,7 +38,7 @@ int print_receipt(const char* filename, time_t timestamp)
     double subtotal = 0;
     double tax;
     double total;
-    char line[52]; // 50개 + \n + \0
+    char line[52];
     char time_buffer[20];
     char food[26];
 
@@ -46,7 +46,7 @@ int print_receipt(const char* filename, time_t timestamp)
         return FALSE;
     }
 
-    stream = fopen(filename, "w");
+    stream = fopen(filename, "wb");
     if (stream == NULL) {
         return FALSE;
     }
@@ -69,7 +69,7 @@ int print_receipt(const char* filename, time_t timestamp)
     fprintf(stream, "%s", "\n");
 
     fprintf(stream, "%33s       %10.2f\n", "Subtotal", subtotal);
-    if (s_tip != 0) {
+    if (s_tip > 0) {
         fprintf(stream, "%33s       %10.2f\n", "Tip", s_tip);
     }
     tax = subtotal * 0.05;

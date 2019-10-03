@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "receipter.h"
 
-static const char* s_menu_list[10];
+static const char* S_MENU_LIST[10];
 static unsigned int s_order_num = 0;
 static double s_menu_price_list[10];
-static const char* s_message;
+static const char* S_MESSAGE;
 static unsigned int s_menu_count = 0;
 static double s_tip = 0;
 
@@ -14,7 +14,7 @@ int add_item(const char* name, double price)
         return FALSE;
     }
 
-    s_menu_list[s_menu_count] = name;
+    S_MENU_LIST[s_menu_count] = name;
     s_menu_price_list[s_menu_count] = price;
     s_menu_count++;
     return TRUE;
@@ -27,7 +27,7 @@ void add_tip(double tip)
 
 void add_message(const char* message)
 {
-    s_message = message;
+    S_MESSAGE = message;
 }
 
 int print_receipt(const char* filename, time_t timestamp)
@@ -59,7 +59,7 @@ int print_receipt(const char* filename, time_t timestamp)
 
     for (i = 0; i < s_menu_count; ++i) {
         for (j = 0; j < 25; ++j) {
-            food[j] = s_menu_list[i][j];
+            food[j] = S_MENU_LIST[i][j];
         }
         food[j] = '\0';
 
@@ -77,7 +77,7 @@ int print_receipt(const char* filename, time_t timestamp)
     total = subtotal + s_tip + tax;
     fprintf(stream, "%33s       %10.2f\n", "Total", total);
     fprintf(stream, "%s", "\n");
-    if (s_message != NULL) {
+    if (S_MESSAGE != NULL) {
         i = 0;
         while (TRUE) {
             if (i == 50) {
@@ -85,14 +85,14 @@ int print_receipt(const char* filename, time_t timestamp)
                 line[51] = '\0';
                 fprintf(stream, "%s", line);
             }
-            if (*s_message == '\0' || i == 75) {
+            if (*S_MESSAGE == '\0' || i == 75) {
                 line[i % 50] = '\n';
-                line[i % 50 +1] = '\0';
+                line[i % 50 + 1] = '\0';
                 fprintf(stream, "%s", line);
                 break;
             }
-            line[i % 50] = *s_message;
-            s_message++;
+            line[i % 50] = *S_MESSAGE;
+            S_MESSAGE++;
             i++;
         }
 
@@ -102,7 +102,7 @@ int print_receipt(const char* filename, time_t timestamp)
     fclose(stream);
 
     s_order_num++;
-    s_message = NULL;
+    S_MESSAGE = NULL;
     s_menu_count = 0;
     s_tip = 0;
 

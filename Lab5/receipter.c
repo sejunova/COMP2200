@@ -84,6 +84,9 @@ int print_receipt(const char* filename, time_t timestamp)
                 line[50] = '\n';
                 line[51] = '\0';
                 fprintf(stream, "%s", line);
+                if (*S_MESSAGE == '\0') {
+                    break;
+                }
             }
             if (*S_MESSAGE == '\0' || i == 75) {
                 line[i % 50] = '\n';

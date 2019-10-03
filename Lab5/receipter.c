@@ -52,7 +52,7 @@ int print_receipt(const char* filename, time_t timestamp)
     }
     fwrite("Charles' Seafood\n", 17, 1, stream);
     fprintf(stream, "%s", "--------------------------------------------------\n");
-    strftime(time_buffer, 20, "%Y-%M-%d %H:%M:%S", localtime(&timestamp));
+    strftime(time_buffer, 20, "%Y-%m-%d %H:%M:%S", localtime(&timestamp));
     sprintf(line, "%s                          %05d\n", time_buffer, s_order_num);
     fwrite(line, 51, 1, stream);
     fprintf(stream, "%s", "--------------------------------------------------\n");

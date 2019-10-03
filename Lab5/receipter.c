@@ -98,7 +98,7 @@ int print_receipt(const char* filename, time_t timestamp)
 
     }
     fprintf(stream, "%s", "==================================================\n");
-    fprintf(stream, "%50s\n", "Tax#-51234");
+    fprintf(stream, "%50s", "Tax#-51234");
     fclose(stream);
 
     s_order_num++;

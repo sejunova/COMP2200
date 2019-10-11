@@ -1,9 +1,9 @@
 #include "character_deserializer.h"
 
-void id_to_name(const char *id, char *out)
+void convert_id_to_name(const char* id, char* out)
 {
     unsigned int i = 7;
-    const char *ptr = id;
+    const char* ptr = id;
     out[0] = 'p';
     out[1] = 'l';
     out[2] = 'a';
@@ -20,10 +20,10 @@ void id_to_name(const char *id, char *out)
     out[i] = *ptr;
 }
 
-unsigned int my_atoi(const char *tok)
+unsigned int my_atoi(const char* tok)
 {
     int integer = 0;
-    const char *ptr = tok;
+    const char* ptr = tok;
 
     while (*ptr != '\0') {
         integer *= 10;
@@ -33,54 +33,54 @@ unsigned int my_atoi(const char *tok)
     return integer;
 }
 
-void deserialize_version_1(FILE *file, character_v3_t *out_character)
+void deserialize_version_1(FILE* file, character_v3_t* out_character)
 {
     char line[1024];
-    char *tok;
-    int bAttribute = TRUE;
+    char* tok;
+    int battribute = TRUE;
     char attribute[6];
 
     rewind(file);
-    if (fgets(line, LINE_SIZE, file) != NULL) {
-        tok = strtok(line, ":,\n\r");
-        while (tok != NULL) {
-            if (bAttribute == TRUE) {
-                strcpy(attribute, tok);
-                bAttribute = FALSE;
-            } else {
-                if (strcmp(attribute, "lvl") == 0) {
-                    out_character->level = my_atoi(tok);
-                    out_character->leadership = my_atoi(tok) / 10;
-                } else if (strcmp(attribute, "intel") == 0) {
-                    out_character->intelligence = my_atoi(tok);
-                } else if (strcmp(attribute, "str") == 0) {
-                    out_character->strength = my_atoi(tok);
-                } else if (strcmp(attribute, "dex") == 0) {
-                    out_character->dexterity = my_atoi(tok);
-                    out_character->evasion = my_atoi(tok) / 2;
-                    out_character->elemental_resistance.fire = my_atoi(tok) / 4 / 3;
-                    out_character->elemental_resistance.cold = my_atoi(tok) / 4 / 3;
-                    out_character->elemental_resistance.lightning = my_atoi(tok) / 4 / 3;
-                } else if (strcmp(attribute, "def") == 0) {
-                    out_character->armour = my_atoi(tok);
-                } else if (strcmp(attribute, "id") == 0) {
-                    id_to_name(tok, out_character->name);
-                } else if (strcmp(attribute, "hp") == 0) {
-                    out_character->health = my_atoi(tok);
-                } else if (strcmp(attribute, "mp") == 0) {
-                    out_character->mana = my_atoi(tok);
-                }
-                bAttribute = TRUE;
+    fgets(line, LINE_SIZE, file);
+    tok = strtok(line, ":,\n\r");
+    while (tok != NULL) {
+        if (battribute == TRUE) {
+            strcpy(attribute, tok);
+            battribute = FALSE;
+        } else {
+            if (strcmp(attribute, "lvl") == 0) {
+                out_character->level = my_atoi(tok);
+                out_character->leadership = my_atoi(tok) / 10;
+            } else if (strcmp(attribute, "intel") == 0) {
+                out_character->intelligence = my_atoi(tok);
+            } else if (strcmp(attribute, "str") == 0) {
+                out_character->strength = my_atoi(tok);
+            } else if (strcmp(attribute, "dex") == 0) {
+                out_character->dexterity = my_atoi(tok);
+                out_character->evasion = my_atoi(tok) / 2;
+                out_character->elemental_resistance.fire = my_atoi(tok) / 4 / 3;
+                out_character->elemental_resistance.cold = my_atoi(tok) / 4 / 3;
+                out_character->elemental_resistance.lightning = my_atoi(tok) / 4 / 3;
+            } else if (strcmp(attribute, "def") == 0) {
+                out_character->armour = my_atoi(tok);
+            } else if (strcmp(attribute, "id") == 0) {
+                convert_id_to_name(tok, out_character->name);
+            } else if (strcmp(attribute, "hp") == 0) {
+                out_character->health = my_atoi(tok);
+            } else if (strcmp(attribute, "mp") == 0) {
+                out_character->mana = my_atoi(tok);
             }
-            tok = strtok(NULL, ":,\n\r");
+            battribute = TRUE;
         }
+        tok = strtok(NULL, ":,\n\r");
     }
+    out_character->minion_count = 0;
 }
 
-void deserialize_version_2(FILE *file, character_v3_t *out_character)
+void deserialize_version_2(FILE* file, character_v3_t* out_character)
 {
     unsigned int i = 0;
-    char *tok;
+    char* tok;
     char line[1024];
 
     fgets(line, LINE_SIZE, file);
@@ -129,11 +129,11 @@ void deserialize_version_2(FILE *file, character_v3_t *out_character)
     out_character->minion_count = 0;
 }
 
-void deserialize_version_3(FILE *file, character_v3_t *out_character)
+void deserialize_version_3(FILE* file, character_v3_t* out_character)
 {
     unsigned int i = 0;
     unsigned int j = 0;
-    char *tok;
+    char* tok;
     char line[1024];
 
     fgets(line, LINE_SIZE, file);
@@ -222,9 +222,9 @@ void deserialize_version_3(FILE *file, character_v3_t *out_character)
     }
 }
 
-int get_character(const char *filename, character_v3_t *out_character)
+int get_character(const char* filename, character_v3_t* out_character)
 {
-    FILE *file;
+    FILE* file;
     char line[LINE_SIZE];
     int version = 0;
 

@@ -5,6 +5,8 @@
 #include <string.h>
 
 #define LINE_SIZE (1024)
+#define TRUE (1)
+#define FALSE (0)
 
 typedef struct {
     char name[51];

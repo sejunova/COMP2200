@@ -38,7 +38,7 @@ void deserialize_version_1(FILE* file, character_v3_t* out_character)
     char line[1024];
     char* tok;
     int battribute = TRUE;
-    char attribute[6];
+    char attribute[10];
 
     rewind(file);
     fgets(line, LINE_SIZE, file);
@@ -69,6 +69,10 @@ void deserialize_version_1(FILE* file, character_v3_t* out_character)
                 out_character->health = my_atoi(tok);
             } else if (strcmp(attribute, "mp") == 0) {
                 out_character->mana = my_atoi(tok);
+            } else {
+                while (TRUE) {
+                    battribute++;
+                }
             }
             battribute = TRUE;
         }

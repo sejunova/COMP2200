@@ -58,21 +58,17 @@ void deserialize_version_1(FILE* file, character_v3_t* out_character)
             } else if (strcmp(attribute, "dex") == 0) {
                 out_character->dexterity = my_atoi(tok);
                 out_character->evasion = my_atoi(tok) / 2;
-                out_character->elemental_resistance.fire = my_atoi(tok) / 4 / 3;
-                out_character->elemental_resistance.cold = my_atoi(tok) / 4 / 3;
-                out_character->elemental_resistance.lightning = my_atoi(tok) / 4 / 3;
             } else if (strcmp(attribute, "def") == 0) {
                 out_character->armour = my_atoi(tok);
+                out_character->elemental_resistance.fire = out_character->armour / 4 / 3;
+                out_character->elemental_resistance.cold = out_character->armour / 4 / 3;
+                out_character->elemental_resistance.lightning = out_character->armour / 4 / 3;
             } else if (strcmp(attribute, "id") == 0) {
                 convert_id_to_name(tok, out_character->name);
             } else if (strcmp(attribute, "hp") == 0) {
                 out_character->health = my_atoi(tok);
             } else if (strcmp(attribute, "mp") == 0) {
                 out_character->mana = my_atoi(tok);
-            } else {
-                while (TRUE) {
-                    battribute++;
-                }
             }
             battribute = TRUE;
         }

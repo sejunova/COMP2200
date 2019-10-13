@@ -12,8 +12,11 @@ int translate(int argc, const char** argv)
     int c;
     char temp_char;
 
-    char set1_translated[BUFFER_SIZE]= {0, };
-    char set2_translated[BUFFER_SIZE]= {0, };
+    char set1_translated[BUFFER_SIZE];
+    char set2_translated[BUFFER_SIZE];
+
+    const char* p_set1_start;
+    const char* p_set2_start;
 
     const char* p_set1;
     const char* p_set2;
@@ -21,6 +24,7 @@ int translate(int argc, const char** argv)
     int set1_count = 0;
     int set2_count = 0;
     const char* last_range_end_index = NULL;
+	return 0;
 
     /* 인자 수가 안 맞는 경우 오류 반환 */
     if (!(argc == 3 || (argc == 4 && strcmp(argv[1], "-i") == 0))) {
@@ -31,9 +35,13 @@ int translate(int argc, const char** argv)
     }
 
     if (argc == 3) {
+        p_set1_start = argv[1];
+        p_set2_start = argv[2];
         p_set1 = argv[1];
         p_set2 = argv[2];
     } else {
+        p_set1_start = argv[2];
+        p_set2_start = argv[3];
         p_set1 = argv[2];
         p_set2 = argv[3];
     }
@@ -71,18 +79,18 @@ int translate(int argc, const char** argv)
             }
         } else if (*p_set1 == '-') {
             /* 첫 번째 문자 혹은 마지막 문자가 - 인 경우 혹은 이전 문자가 range의 마지막인 경우 */
-            if (p_set1 == argv[1] || *(p_set1 + 1) == '\0' ||
+            if (p_set1 == p_set1_start || *(p_set1 + 1) == '\0' ||
                 (last_range_end_index != NULL && p_set1 - 1 == last_range_end_index)) {
                 set1_translated[set1_count] = '-';
             } else {
                 if (*(p_set1 - 1) > *(p_set1 + 1)) {
                     return invalid_range;
                 }
-                for (i = 0; (char) (*(p_set1 - 1) + i) < *(p_set1 + 1); ++i) {
+                for (i = 0; (char)(*(p_set1 - 1) + i) < *(p_set1 + 1); ++i) {
                     if (set1_count == BUFFER_SIZE) {
                         return argument_too_long;
                     }
-                    set1_translated[set1_count] = (char) (*(p_set1 - 1) + i + 1);
+                    set1_translated[set1_count] = (char)(*(p_set1 - 1) + i + 1);
                     set1_count++;
                 }
                 p_set1++;
@@ -134,18 +142,18 @@ int translate(int argc, const char** argv)
             }
         } else if (*p_set2 == '-') {
             /* 첫 번째 문자 혹은 마지막 문자가 - 인 경우 혹은 이전 문자가 range의 마지막인 경우 */
-            if (p_set2 == argv[1] || *(p_set2 + 1) == '\0' ||
+            if (p_set2 == p_set2_start || *(p_set2 + 1) == '\0' ||
                 (last_range_end_index != NULL && p_set2 - 1 == last_range_end_index)) {
                 set2_translated[set2_count] = '-';
             } else {
                 if (*(p_set2 - 1) > *(p_set2 + 1)) {
                     return invalid_range;
                 }
-                for (i = 0; (char) (*(p_set2 - 1) + i) < *(p_set2 + 1); ++i) {
+                for (i = 0; (char)(*(p_set2 - 1) + i) < *(p_set2 + 1); ++i) {
                     if (set2_count == BUFFER_SIZE) {
                         return argument_too_long;
                     }
-                    set2_translated[set2_count] = (char) (*(p_set2 - 1) + i + 1);
+                    set2_translated[set2_count] = (char)(*(p_set2 - 1) + i + 1);
                     set2_count++;
                 }
                 p_set2++;

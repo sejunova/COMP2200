@@ -49,11 +49,11 @@ int translate(int argc, const char** argv)
 
     /* SET1 PART*/
     while (*p_set1 != '\0') {
-        if (*p_set1 == 39) {
+        if (*p_set1 == 39 || *p_set1 == 34) {
             p_set1++;
             continue;
         }
-        if (set1_count == BUFFER_SIZE) {
+        if (set1_count == BUFFER_SIZE - 1) {
             return argument_too_long;
         }
 
@@ -121,7 +121,7 @@ int translate(int argc, const char** argv)
                     return invalid_range;
                 }
                 for (i = 0; (char)(set1_translated[set1_count - 1]) < next_char; ++i) {
-                    if (set1_count == BUFFER_SIZE) {
+                    if (set1_count == BUFFER_SIZE - 1) {
                         return argument_too_long;
                     }
                     set1_translated[set1_count] = (char)(set1_translated[set1_count - 1] + 1);
@@ -142,11 +142,11 @@ int translate(int argc, const char** argv)
     last_range_end_index = NULL;
     /* SET2 PART*/
     while (*p_set2 != '\0') {
-        if (*p_set2 == 39) {
+        if (*p_set2 == 39 || *p_set2 == 34) {
             p_set2++;
             continue;
         }
-        if (set2_count == BUFFER_SIZE) {
+        if (set2_count == BUFFER_SIZE - 1) {
             return argument_too_long;
         }
 
@@ -214,7 +214,7 @@ int translate(int argc, const char** argv)
                     return invalid_range;
                 }
                 for (i = 0; (char)(set2_translated[set2_count - 1]) < next_char; ++i) {
-                    if (set2_count == BUFFER_SIZE) {
+                    if (set2_count == BUFFER_SIZE - 1) {
                         return argument_too_long;
                     }
                     set2_translated[set2_count] = (char)(set2_translated[set2_count - 1] + 1);

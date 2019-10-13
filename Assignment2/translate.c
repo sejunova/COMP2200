@@ -29,10 +29,10 @@ int translate(int argc, const char** argv)
 
     /* 인자 수가 안 맞는 경우 오류 반환 */
     if (!(argc == 3 || (argc == 4 && strcmp(argv[1], "-i") == 0))) {
+        if (argc == 4 && strcmp(argv[1], "-i") != 0) {
+            return invalid_flag;
+        }
         return wrong_arguemnt_number;
-    }
-    if (argc == 4 && strcmp(argv[1], "-i") != 0) {
-        return invalid_flag;
     }
 
     if (argc == 3) {

@@ -46,14 +46,14 @@ char** tokenize_malloc(const char* str, const char* delim)
     size_t str_len;
     size_t start = 0;
     size_t end = 0;
-    const size_t TOKEN_ARR_LENGTH = get_token_array_size(str, delim);
-    char** token_arr = (char**)malloc((TOKEN_ARR_LENGTH + 1) * sizeof(char*));
+    const size_t token_arr_length = get_token_array_size(str, delim);
+    char** token_arr = (char**)malloc((token_arr_length + 1) * sizeof(char*));
 
     while (str[j] != '\0') {
         if (is_delim(str[j], delim)) {
             str_len = end - start + 1;
             if (str_len > 1) {
-                token_arr[i] = (char *) malloc(str_len * sizeof(char));
+                token_arr[i] = (char*)malloc(str_len * sizeof(char));
                 strncpy(token_arr[i], &str[start], str_len);
                 token_arr[i][str_len - 1] = '\0';
                 i++;
@@ -66,7 +66,7 @@ char** tokenize_malloc(const char* str, const char* delim)
     if (!is_delim(str[j - 1], delim)) {
         str_len = end - start + 1;
         if (str_len > 1) {
-            token_arr[i] = (char *) malloc(str_len * sizeof(char));
+            token_arr[i] = (char*)malloc(str_len * sizeof(char));
             strncpy(token_arr[i], &str[start], str_len);
             token_arr[i][str_len - 1] = '\0';
             i++;

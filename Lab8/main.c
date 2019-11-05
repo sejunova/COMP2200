@@ -7,9 +7,7 @@ int main(void)
 {
     parenthesis_t parentheses[PARENTHESES_MAX_SIZE];
 
-    size_t len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "}{)(][><");
-
-    assert(len == 0);
+    size_t len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "({(})");
 
     len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "{{{}}}");
 

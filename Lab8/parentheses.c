@@ -4,14 +4,14 @@
 size_t s_stack_count = 0;
 size_t s_stack_size = 2;
 
-void push(parenthesis_index_t* stack, char parenthesis, size_t index)
+void push(parenthesis_index_t** stack, char parenthesis, size_t index)
 {
     if (s_stack_count == s_stack_size) {
         s_stack_size *= 2;
-        stack = realloc(stack, s_stack_size * sizeof(parenthesis_index_t));
+        *stack = realloc(*stack, s_stack_size * sizeof(parenthesis_index_t));
     }
-    stack[s_stack_count].parenthesis = parenthesis;
-    stack[s_stack_count].index = index;
+    (*stack)[s_stack_count].parenthesis = parenthesis;
+    (*stack)[s_stack_count].index = index;
     s_stack_count++;
 }
 
@@ -36,7 +36,7 @@ size_t get_matching_parentheses(parenthesis_t* parentheses, size_t max_size, con
 
     while (*p != '\0') {
         if (*p == '{' || *p == '[' || *p == '(' || *p == '<') {
-            push(stack, *p, index);
+            push(&stack, *p, index);
         }
         else if ((s_stack_count != 0) && ((*p == '}' && stack[s_stack_count - 1].parenthesis == '{') || (*p == ')' && stack[s_stack_count - 1].parenthesis == '(') || (*p == ']' && stack[s_stack_count - 1].parenthesis == '[') || (*p == '>' && stack[s_stack_count - 1].parenthesis == '<'))) {
             parentheses[parentheses_count].opening_index = pop(stack).index;
@@ -44,6 +44,7 @@ size_t get_matching_parentheses(parenthesis_t* parentheses, size_t max_size, con
             parentheses_count++;
             if (parentheses_count == max_size) {
                 qsort(parentheses, parentheses_count, sizeof(parentheses), compare_stack);
+                free(stack);
                 return parentheses_count;
             }
         }
@@ -51,6 +52,7 @@ size_t get_matching_parentheses(parenthesis_t* parentheses, size_t max_size, con
         index++;
     }
     qsort(parentheses, parentheses_count, sizeof(parenthesis_t), compare_stack);
+    free(stack);
     return parentheses_count;
 }
 

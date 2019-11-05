@@ -88,8 +88,7 @@ size_t get_matching_parentheses(parenthesis_t* parentheses, size_t max_size, con
                         push(&stack, temp_popped.parenthesis, temp_popped.index, &stack_size, &stack_count);
                     }
                     break;
-                }
-                else {
+                } else {
                     push(&temp_stack, popped.parenthesis, popped.index, &temp_stack_size, &temp_stack_count);
                 }
             }

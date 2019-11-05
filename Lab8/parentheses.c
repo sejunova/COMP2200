@@ -28,7 +28,7 @@ size_t get_matching_parentheses(parenthesis_t* parentheses, size_t max_size, con
 {
     size_t stack_size = 2;
     size_t stack_count = 0;
-    parenthesis_index_t* stack = (parenthesis_index_t*)malloc(sizeof(parenthesis_t) * stack_size);
+    parenthesis_index_t* stack = (parenthesis_index_t*)malloc(sizeof(parenthesis_index_t) * stack_size);
     size_t parentheses_count = 0;
     const char* p = str;
     size_t index = 0;

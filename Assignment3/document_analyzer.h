@@ -6,8 +6,19 @@
 #define TRUE (1)
 #define FALSE (0)
 
-#define CONTENT_INIT_LENGTH (10)
-#define LINE_LENGTH (5)
+#define CONTENT_INIT_LENGTH (4096)
+#define LINE_LENGTH (1024)
+
+typedef struct {
+    size_t sentence_count;
+    size_t* sentence_word_counts;
+} sub_paragraph_count;
+
+typedef struct {
+    size_t remain_buffer;
+    char* char_arr;
+    size_t length;
+} content;
 
 int load_document(const char* document);
 

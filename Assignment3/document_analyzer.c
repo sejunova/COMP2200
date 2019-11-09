@@ -8,7 +8,6 @@ static size_t s_total_sentence_count;
 static size_t s_total_paragraph_count;
 
 static char**** s_document;
-static sub_paragraph_count* sub_paragraph_counts;
 
 
 size_t count_paragraphs(const char* content)
@@ -28,6 +27,9 @@ size_t count_paragraphs(const char* content)
         }
         prev_char = *ptr;
         ptr++;
+    }
+    if (*(ptr - 1) == '\n') {
+        return count;
     }
     return ++count;
 }
@@ -62,7 +64,6 @@ size_t count_word(const char* sentence)
 
 void get_next_word(const char* str, size_t start_pos, size_t* new_word_start, size_t* length)
 {
-    size_t found_word = FALSE;
     *length = 0;
 
     while (str[start_pos] == ' ' || str[start_pos] == ',') {
@@ -77,7 +78,6 @@ void get_next_word(const char* str, size_t start_pos, size_t* new_word_start, si
 
 void get_next_sentence(const char* str, size_t start_pos, size_t* new_sentence_start, size_t* length)
 {
-    size_t found_word = FALSE;
     *length = 0;
 
     while (str[start_pos] == ' ') {
@@ -109,6 +109,7 @@ int load_document(const char* document)
     size_t word_cur;
     size_t word_start;
     size_t word_length;
+    char line[LINE_LENGTH];
 
     fstream = fopen(document, "r");
     if (fstream == NULL) {
@@ -122,7 +123,6 @@ int load_document(const char* document)
     content.length = CONTENT_INIT_LENGTH;
     content.remain_buffer = CONTENT_INIT_LENGTH;
 
-    char line[LINE_LENGTH];
     while (fgets(line, LINE_LENGTH, fstream) != NULL) {
         if (content.remain_buffer < LINE_LENGTH) {
             content.remain_buffer += content.length;
@@ -137,15 +137,12 @@ int load_document(const char* document)
     }
 
     s_total_paragraph_count = count_paragraphs(content.char_arr);
-    sub_paragraph_counts = (sub_paragraph_count*)malloc(sizeof(sub_paragraph_count) * s_total_paragraph_count);
     s_document = (char****)malloc(s_total_paragraph_count * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");
     i = 0;
     while (paragraph_token != NULL) {
         sentence_count = count_sentence(paragraph_token);
-        sub_paragraph_counts[i].sentence_count = sentence_count;
-        sub_paragraph_counts[i].sentence_word_counts = (size_t*)malloc(sentence_count * sizeof(size_t));
         s_document[i] = (char***)malloc((sentence_count + 1) * sizeof(char**));
         s_total_sentence_count += sentence_count;
 
@@ -155,7 +152,6 @@ int load_document(const char* document)
             sentence_cur = sentence_start + sentence_length;
 
             word_count = count_word(&paragraph_token[sentence_start]);
-            sub_paragraph_counts[i].sentence_word_counts[j] = word_count;
             s_total_word_count += word_count;
             s_document[i][j] = (char**)malloc((word_count + 1) * sizeof(char*));
 
@@ -174,6 +170,7 @@ int load_document(const char* document)
         i++;
     }
     free(content.char_arr);
+    return TRUE;
 }
 
 void dispose(void)
@@ -225,37 +222,82 @@ const char*** get_paragraph(const size_t paragraph_index)
 
 size_t get_paragraph_word_count(const char*** paragraph)
 {
+    size_t i = 0;
+    size_t j;
+    size_t count = 0;
 
+    while (paragraph[i] != NULL) {
+        j = 0;
+        while (paragraph[i][j] != NULL) {
+            count++;
+            j++;
+        }
+        i++;
+    }
+    return count;
 }
 
+size_t get_paragraph_sentence_count(const char*** paragraph)
+{
+    size_t i = 0;
+    size_t count = 0;
+    while (paragraph[i] != NULL) {
+        count++;
+        i++;
+    }
+    return count;
+}
 
+const char** get_sentence(const size_t paragraph_index, const size_t sentence_index)
+{
+    return (const char**)s_document[paragraph_index][sentence_index];
+}
 
-
-
+size_t get_sentence_word_count(const char** sentence)
+{
+    size_t i = 0;
+    size_t count = 0;
+    while (sentence[i] != NULL) {
+        count++;
+        i++;
+    }
+    return count;
+}
 
 int print_as_tree(const char* filename)
 {
-    // 파일스트림 열다가 에러나면 FALSE 리턴하자
     size_t i;
     size_t j;
     size_t k;
+    FILE* fstream;
+    if (s_total_paragraph_count == 0) {
+        return FALSE;
+    }
+    fstream = fopen(filename, "w");
+    if (fstream == NULL) {
+        return FALSE;
+    }
+
     for (i = 0; i < s_total_paragraph_count; ++i) {
-        printf("Paragraph %d:\n", i);
+        fprintf(fstream, "Paragraph %zu:\n", i);
         j = 0;
         while (s_document[i][j] != NULL) {
-            printf("    Sentence %d:\n", j);
+            fprintf(fstream, "    Sentence %zu:\n", j);
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                printf("        %s\n", s_document[i][j][k]);
+                if (i == s_total_paragraph_count - 1 && s_document[i][j + 1] == NULL && s_document[i][j][k + 1] == NULL) {
+                    fprintf(fstream, "        %s", s_document[i][j][k]);
+                } else {
+                    fprintf(fstream, "        %s\n", s_document[i][j][k]);
+                }
                 k++;
             }
             j++;
         }
+        if (i != s_total_paragraph_count - 1) {
+            fprintf(fstream, "%s","\n");
+        }
     }
     return TRUE;
 }
-
-
-
-
 

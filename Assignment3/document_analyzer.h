@@ -10,11 +10,6 @@
 #define LINE_LENGTH (1024)
 
 typedef struct {
-    size_t sentence_count;
-    size_t* sentence_word_counts;
-} sub_paragraph_count;
-
-typedef struct {
     size_t remain_buffer;
     char* char_arr;
     size_t length;
@@ -43,3 +38,4 @@ size_t get_sentence_word_count(const char** sentence);
 int print_as_tree(const char* filename);
 
 #endif /* DOCUMENT_ANALYZER_H */
+

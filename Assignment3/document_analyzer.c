@@ -76,18 +76,6 @@ void get_next_word(const char* str, size_t start_pos, size_t* new_word_start, si
     }
 }
 
-int is_empty(const char* str)
-{
-    const char* ptr = str;
-    while (*ptr != '\0') {
-        if (*ptr != '\n') {
-            return FALSE;
-        }
-        ptr++;
-    }
-    return TRUE;
-}
-
 void get_next_sentence(const char* str, size_t start_pos, size_t* new_sentence_start, size_t* length)
 {
     *length = 0;
@@ -124,9 +112,6 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
 
     fstream = fopen(document, "r");
-    s_total_paragraph_count = 0;
-    s_total_sentence_count = 0;
-    s_total_word_count = 0;
     dispose();
     if (fstream == NULL) {
         return FALSE;
@@ -148,12 +133,12 @@ int load_document(const char* document)
         strncpy(pointer_to_add, line, line_len);
         content.remain_buffer -= line_len;
     }
-    if (is_empty(content.char_arr)) {
+
+    s_total_paragraph_count = count_paragraphs(content.char_arr);
+    if (s_total_paragraph_count == 0) {
         free(content.char_arr);
         return FALSE;
     }
-
-    s_total_paragraph_count = count_paragraphs(content.char_arr);
     s_document = (char****)malloc((s_total_paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");
@@ -196,6 +181,9 @@ void dispose(void)
     size_t i;
     size_t j;
     size_t k;
+    s_total_paragraph_count = 0;
+    s_total_sentence_count = 0;
+    s_total_word_count = 0;
     if (s_document == NULL) {
         return;
     }
@@ -325,16 +313,16 @@ int print_as_tree(const char* filename)
             fprintf(fstream, "    Sentence %zu:\n", j);
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                if (i == s_total_paragraph_count - 1 && s_document[i][j + 1] == NULL && s_document[i][j][k + 1] == NULL) {
-                    fprintf(fstream, "        %s", s_document[i][j][k]);
-                } else {
-                    fprintf(fstream, "        %s\n", s_document[i][j][k]);
-                }
+                fprintf(fstream, "        %s\n", s_document[i][j][k]);
                 k++;
             }
             j++;
         }
+        if (i != s_total_paragraph_count - 1) {
+            fprintf(fstream, "%s", "\n");
+        }
     }
     return TRUE;
 }
+
 

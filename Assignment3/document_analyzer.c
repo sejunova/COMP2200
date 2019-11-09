@@ -111,7 +111,7 @@ int load_document(const char* document)
     size_t word_length;
     char line[LINE_LENGTH];
 
-    fstream = fopen(document, "rb");
+    fstream = fopen(document, "r");
     s_total_paragraph_count = 0;
     s_total_sentence_count = 0;
     s_total_word_count = 0;
@@ -301,7 +301,7 @@ int print_as_tree(const char* filename)
     if (s_document == NULL) {
         return FALSE;
     }
-    fstream = fopen(filename, "wb");
+    fstream = fopen(filename, "w");
     if (fstream == NULL) {
         return FALSE;
     }

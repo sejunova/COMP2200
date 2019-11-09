@@ -112,9 +112,6 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
 
     fstream = fopen(document, "r");
-    s_total_paragraph_count = 0;
-    s_total_sentence_count = 0;
-    s_total_word_count = 0;
     dispose();
     if (fstream == NULL) {
         return FALSE;
@@ -184,6 +181,9 @@ void dispose(void)
     size_t i;
     size_t j;
     size_t k;
+    s_total_paragraph_count = 0;
+    s_total_sentence_count = 0;
+    s_total_word_count = 0;
     if (s_document == NULL) {
         return;
     }
@@ -310,11 +310,7 @@ int print_as_tree(const char* filename)
             fprintf(fstream, "    Sentence %zu:\n", j);
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                if (i == s_total_paragraph_count - 1 && s_document[i][j + 1] == NULL && s_document[i][j][k + 1] == NULL) {
-                    fprintf(fstream, "        %s", s_document[i][j][k]);
-                } else {
-                    fprintf(fstream, "        %s\n", s_document[i][j][k]);
-                }
+                fprintf(fstream, "        %s\n", s_document[i][j][k]);
                 k++;
             }
             j++;

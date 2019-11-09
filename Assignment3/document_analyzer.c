@@ -116,6 +116,7 @@ int load_document(const char* document)
         s_total_paragraph_count = 0;
         s_total_sentence_count = 0;
         s_total_word_count = 0;
+        s_document = NULL;
         return FALSE;
     }
 
@@ -137,7 +138,7 @@ int load_document(const char* document)
     }
 
     s_total_paragraph_count = count_paragraphs(content.char_arr);
-    s_document = (char****)malloc(s_total_paragraph_count * sizeof(char***));
+    s_document = (char****)malloc((s_total_paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");
     i = 0;
@@ -169,6 +170,7 @@ int load_document(const char* document)
         paragraph_token = strtok(NULL, "\n");
         i++;
     }
+    s_document[s_total_paragraph_count] = NULL;
     free(content.char_arr);
     return TRUE;
 }
@@ -182,13 +184,11 @@ void dispose(void)
         j = 0;
         while (TRUE) {
             if (s_document[i][j] == NULL) {
-                free(s_document[i][j]);
                 break;
             }
             k = 0;
             while (s_document[i][j][k] != NULL) {
                 if (s_document[i][j][k] != NULL) {
-                    free(s_document[i][j][k]);
                     break;
                 }
                 free(s_document[i][j][k]);
@@ -198,6 +198,7 @@ void dispose(void)
         }
         free(s_document[i]);
     }
+    free(s_document);
 }
 
 size_t get_total_word_count(void)
@@ -217,6 +218,9 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph(const size_t paragraph_index)
 {
+    if (paragraph_index >= s_total_paragraph_count) {
+        return NULL;
+    }
     return (const char***)s_document[paragraph_index];
 }
 
@@ -250,6 +254,11 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence(const size_t paragraph_index, const size_t sentence_index)
 {
+    const char*** paragraph = get_paragraph(paragraph_index);
+    if (paragraph == NULL || get_paragraph_sentence_count(paragraph) <= sentence_index) {
+        return NULL;
+    }
+
     return (const char**)s_document[paragraph_index][sentence_index];
 }
 
@@ -295,7 +304,7 @@ int print_as_tree(const char* filename)
             j++;
         }
         if (i != s_total_paragraph_count - 1) {
-            fprintf(fstream, "%s","\n");
+            fprintf(fstream, "%s", "\n");
         }
     }
     return TRUE;

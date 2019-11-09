@@ -7,7 +7,7 @@ static size_t s_total_word_count;
 static size_t s_total_sentence_count;
 static size_t s_total_paragraph_count;
 
-static char**** s_document;
+static char**** s_document = NULL;
 
 
 size_t count_paragraphs(const char* content)
@@ -180,6 +180,9 @@ void dispose(void)
     size_t i;
     size_t j;
     size_t k;
+    if (s_document == NULL) {
+        return;
+    }
     for (i = 0; i < s_total_paragraph_count; ++i) {
         j = 0;
         while (TRUE) {
@@ -203,16 +206,25 @@ void dispose(void)
 
 size_t get_total_word_count(void)
 {
+    if (s_document == NULL) {
+        return 0;
+    }
     return s_total_word_count;
 }
 
 size_t get_total_sentence_count(void)
 {
+    if (s_document == NULL) {
+        return 0;
+    }
     return s_total_sentence_count;
 }
 
 size_t get_total_paragraph_count(void)
 {
+    if (s_document == NULL) {
+        return 0;
+    }
     return s_total_paragraph_count;
 }
 
@@ -279,7 +291,7 @@ int print_as_tree(const char* filename)
     size_t j;
     size_t k;
     FILE* fstream;
-    if (s_total_paragraph_count == 0) {
+    if (s_document == NULL) {
         return FALSE;
     }
     fstream = fopen(filename, "w");
@@ -309,4 +321,3 @@ int print_as_tree(const char* filename)
     }
     return TRUE;
 }
-

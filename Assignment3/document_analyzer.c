@@ -112,11 +112,11 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
 
     fstream = fopen(document, "r");
+    s_total_paragraph_count = 0;
+    s_total_sentence_count = 0;
+    s_total_word_count = 0;
+    dispose();
     if (fstream == NULL) {
-        s_total_paragraph_count = 0;
-        s_total_sentence_count = 0;
-        s_total_word_count = 0;
-        s_document = NULL;
         return FALSE;
     }
 
@@ -138,6 +138,10 @@ int load_document(const char* document)
     }
 
     s_total_paragraph_count = count_paragraphs(content.char_arr);
+    if (s_total_paragraph_count == 0) {
+        free(content.char_arr);
+        return FALSE;
+    }
     s_document = (char****)malloc((s_total_paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");
@@ -202,6 +206,7 @@ void dispose(void)
         free(s_document[i]);
     }
     free(s_document);
+    s_document = NULL;
 }
 
 size_t get_total_word_count(void)
@@ -321,3 +326,4 @@ int print_as_tree(const char* filename)
     }
     return TRUE;
 }
+

@@ -111,7 +111,7 @@ int load_document(const char* document)
     size_t word_length;
     char line[LINE_LENGTH];
 
-    fstream = fopen(document, "r");
+    fstream = fopen(document, "rb");
     s_total_paragraph_count = 0;
     s_total_sentence_count = 0;
     s_total_word_count = 0;
@@ -230,6 +230,9 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph(const size_t paragraph_index)
 {
+    if (s_document == NULL) {
+        return NULL;
+    }
     if (paragraph_index >= s_total_paragraph_count) {
         return NULL;
     }
@@ -298,7 +301,7 @@ int print_as_tree(const char* filename)
     if (s_document == NULL) {
         return FALSE;
     }
-    fstream = fopen(filename, "w");
+    fstream = fopen(filename, "wb");
     if (fstream == NULL) {
         return FALSE;
     }
@@ -318,9 +321,6 @@ int print_as_tree(const char* filename)
                 k++;
             }
             j++;
-        }
-        if (i != s_total_paragraph_count - 1) {
-            fprintf(fstream, "%s", "\n");
         }
     }
     return TRUE;

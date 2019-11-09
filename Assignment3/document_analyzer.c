@@ -3,12 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 
-static size_t s_total_word_count = 0;
-static size_t s_total_sentence_count = 0;
-static size_t s_total_paragraph_count = 0;
-
 static char**** s_document = NULL;
-
 
 size_t count_paragraphs(const char* content)
 {
@@ -97,6 +92,7 @@ int load_document(const char* document)
     content content;
     char* pointer_to_add;
     size_t line_len;
+    size_t paragraph_count;
     size_t sentence_count;
     size_t word_count;
     char* paragraph_token;
@@ -134,19 +130,18 @@ int load_document(const char* document)
         content.remain_buffer -= line_len;
     }
 
-    s_total_paragraph_count = count_paragraphs(content.char_arr);
-    if (s_total_paragraph_count == 0) {
+    paragraph_count = count_paragraphs(content.char_arr);
+    if (paragraph_count == 0) {
         free(content.char_arr);
         return FALSE;
     }
-    s_document = (char****)malloc((s_total_paragraph_count + 1) * sizeof(char***));
+    s_document = (char****)malloc((paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");
     i = 0;
     while (paragraph_token != NULL) {
         sentence_count = count_sentence(paragraph_token);
         s_document[i] = (char***)malloc((sentence_count + 1) * sizeof(char**));
-        s_total_sentence_count += sentence_count;
 
         sentence_cur = 0;
         for (j = 0; j < sentence_count; ++j) {
@@ -154,7 +149,6 @@ int load_document(const char* document)
             sentence_cur = sentence_start + sentence_length;
 
             word_count = count_word(&paragraph_token[sentence_start]);
-            s_total_word_count += word_count;
             s_document[i][j] = (char**)malloc((word_count + 1) * sizeof(char*));
 
             word_cur = sentence_start;
@@ -171,7 +165,7 @@ int load_document(const char* document)
         paragraph_token = strtok(NULL, "\n");
         i++;
     }
-    s_document[s_total_paragraph_count] = NULL;
+    s_document[paragraph_count] = NULL;
     free(content.char_arr);
     return TRUE;
 }
@@ -181,13 +175,11 @@ void dispose(void)
     size_t i;
     size_t j;
     size_t k;
-    s_total_paragraph_count = 0;
-    s_total_sentence_count = 0;
-    s_total_word_count = 0;
     if (s_document == NULL) {
         return;
     }
-    for (i = 0; i < s_total_paragraph_count; ++i) {
+    i = 0;
+    while (s_document[i] != NULL) {
         j = 0;
         while (s_document[i][j] != NULL) {
             k = 0;
@@ -199,6 +191,7 @@ void dispose(void)
             j++;
         }
         free(s_document[i]);
+        i++;
     }
     free(s_document);
     s_document = NULL;
@@ -206,31 +199,70 @@ void dispose(void)
 
 size_t get_total_word_count(void)
 {
+    size_t i;
+    size_t j;
+    size_t k;
+    size_t count = 0;
     if (s_document == NULL) {
         return 0;
     }
-    return s_total_word_count;
+    i = 0;
+    while (s_document[i] != NULL) {
+        j = 0;
+        while (s_document[i][j] != NULL) {
+            k = 0;
+            while (s_document[i][j][k] != NULL) {
+                count++;
+                k++;
+            }
+            j++;
+        }
+        i++;
+    }
+    return count;
 }
 
 size_t get_total_sentence_count(void)
 {
+    size_t i;
+    size_t j;
+    size_t count = 0;
     if (s_document == NULL) {
         return 0;
     }
-    return s_total_sentence_count;
+    i = 0;
+    while (s_document[i] != NULL) {
+        j = 0;
+        while (s_document[i][j] != NULL) {
+            count++;
+            j++;
+        }
+        i++;
+    }
+    return count;
 }
 
 size_t get_total_paragraph_count(void)
 {
+    size_t i;
+    size_t count = 0;
     if (s_document == NULL) {
         return 0;
     }
-    return s_total_paragraph_count;
+    i = 0;
+    while (s_document[i] != NULL) {
+        count++;
+        i++;
+    }
+    return count;
 }
 
 const char*** get_paragraph(const size_t paragraph_index)
 {
-    if (paragraph_index >= s_total_paragraph_count) {
+    if (s_document == NULL) {
+        return NULL;
+    }
+    if (paragraph_index >= get_total_paragraph_count()) {
         return NULL;
     }
     return (const char***)s_document[paragraph_index];
@@ -294,6 +326,7 @@ int print_as_tree(const char* filename)
     size_t i;
     size_t j;
     size_t k;
+    size_t paragraph_count;
     FILE* fstream;
     if (s_document == NULL) {
         return FALSE;
@@ -303,7 +336,9 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
-    for (i = 0; i < s_total_paragraph_count; ++i) {
+    paragraph_count = get_total_paragraph_count();
+    i = 0;
+    while (s_document[i] != NULL) {
         fprintf(fstream, "Paragraph %zu:\n", i);
         j = 0;
         while (s_document[i][j] != NULL) {
@@ -315,9 +350,10 @@ int print_as_tree(const char* filename)
             }
             j++;
         }
-        if (i != s_total_paragraph_count - 1) {
+        if (i != paragraph_count - 1) {
             fprintf(fstream, "%s", "\n");
         }
+        i++;
     }
     return TRUE;
 }

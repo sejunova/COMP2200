@@ -133,7 +133,7 @@ int load_document(const char* document)
     paragraph_count = count_paragraphs(content.char_arr);
     if (paragraph_count == 0) {
         free(content.char_arr);
-        return FALSE;
+        return TRUE;
     }
     s_document = (char****)malloc((paragraph_count + 1) * sizeof(char***));
 

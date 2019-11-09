@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdio.h>
 
-static size_t s_total_word_count;
-static size_t s_total_sentence_count;
-static size_t s_total_paragraph_count;
+static size_t s_total_word_count = 0;
+static size_t s_total_sentence_count = 0;
+static size_t s_total_paragraph_count = 0;
 
 static char**** s_document = NULL;
 
@@ -189,18 +189,13 @@ void dispose(void)
     }
     for (i = 0; i < s_total_paragraph_count; ++i) {
         j = 0;
-        while (TRUE) {
-            if (s_document[i][j] == NULL) {
-                break;
-            }
+        while (s_document[i][j] != NULL) {
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                if (s_document[i][j][k] != NULL) {
-                    break;
-                }
                 free(s_document[i][j][k]);
                 k++;
             }
+            free(s_document[i][j]);
             j++;
         }
         free(s_document[i]);
@@ -271,7 +266,11 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence(const size_t paragraph_index, const size_t sentence_index)
 {
-    const char*** paragraph = get_paragraph(paragraph_index);
+    const char*** paragraph;
+    if (s_document == NULL) {
+        return NULL;
+    }
+    paragraph = get_paragraph(paragraph_index);
     if (paragraph == NULL || get_paragraph_sentence_count(paragraph) <= sentence_index) {
         return NULL;
     }

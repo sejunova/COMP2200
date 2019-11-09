@@ -130,6 +130,11 @@ int load_document(const char* document)
         content.remain_buffer -= line_len;
     }
 
+    if (content.remain_buffer == content.length) {
+        free(content.char_arr);
+        return TRUE;
+    }
+
     paragraph_count = count_paragraphs(content.char_arr);
     if (paragraph_count == 0) {
         free(content.char_arr);

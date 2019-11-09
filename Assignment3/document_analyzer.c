@@ -76,6 +76,18 @@ void get_next_word(const char* str, size_t start_pos, size_t* new_word_start, si
     }
 }
 
+int is_empty(const char* str)
+{
+    const char* ptr = str;
+    while (*ptr != '\0') {
+        if (*ptr != '\n') {
+            return FALSE;
+        }
+        ptr++;
+    }
+    return TRUE;
+}
+
 void get_next_sentence(const char* str, size_t start_pos, size_t* new_sentence_start, size_t* length)
 {
     *length = 0;
@@ -136,12 +148,12 @@ int load_document(const char* document)
         strncpy(pointer_to_add, line, line_len);
         content.remain_buffer -= line_len;
     }
-
-    s_total_paragraph_count = count_paragraphs(content.char_arr);
-    if (s_total_paragraph_count == 0) {
+    if (is_empty(content.char_arr)) {
         free(content.char_arr);
         return FALSE;
     }
+
+    s_total_paragraph_count = count_paragraphs(content.char_arr);
     s_document = (char****)malloc((s_total_paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");

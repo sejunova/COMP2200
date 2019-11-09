@@ -230,9 +230,6 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph(const size_t paragraph_index)
 {
-    if (s_document == NULL) {
-        return NULL;
-    }
     if (paragraph_index >= s_total_paragraph_count) {
         return NULL;
     }
@@ -313,7 +310,11 @@ int print_as_tree(const char* filename)
             fprintf(fstream, "    Sentence %zu:\n", j);
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                fprintf(fstream, "        %s\n", s_document[i][j][k]);
+                if (i == s_total_paragraph_count - 1 && s_document[i][j + 1] == NULL && s_document[i][j][k + 1] == NULL) {
+                    fprintf(fstream, "        %s", s_document[i][j][k]);
+                } else {
+                    fprintf(fstream, "        %s\n", s_document[i][j][k]);
+                }
                 k++;
             }
             j++;
@@ -322,7 +323,6 @@ int print_as_tree(const char* filename)
             fprintf(fstream, "%s", "\n");
         }
     }
-    fflush(fstream);
     return TRUE;
 }
 

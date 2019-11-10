@@ -116,7 +116,8 @@ int load_document(const char* document)
     c = fgetc(fstream);
     if (c < 0) {
         fclose(fstream);
-        return FALSE;
+        s_document = NULL;
+        return TRUE;
     }
     rewind(fstream);
 
@@ -138,11 +139,6 @@ int load_document(const char* document)
     }
 
     paragraph_count = count_paragraphs(content.char_arr);
-    if (paragraph_count == 0) {
-        free(content.char_arr);
-        fclose(fstream);
-        return TRUE;
-    }
     s_document = (char****)malloc((paragraph_count + 1) * sizeof(char***));
 
     paragraph_token = strtok(content.char_arr, "\n");

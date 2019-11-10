@@ -108,13 +108,14 @@ int load_document(const char* document)
     size_t word_length;
     char line[LINE_LENGTH];
 
-    fstream = fopen(document, "r");
     dispose();
+    fstream = fopen(document, "r");
     if (fstream == NULL) {
         return FALSE;
     }
     c = fgetc(fstream);
     if (c == -1) {
+        fclose(fstream);
         return FALSE;
     }
     rewind(fstream);
@@ -139,6 +140,7 @@ int load_document(const char* document)
     paragraph_count = count_paragraphs(content.char_arr);
     if (paragraph_count == 0) {
         free(content.char_arr);
+        fclose(fstream);
         return TRUE;
     }
     s_document = (char****)malloc((paragraph_count + 1) * sizeof(char***));
@@ -173,6 +175,7 @@ int load_document(const char* document)
     }
     s_document[paragraph_count] = NULL;
     free(content.char_arr);
+    fclose(fstream);
     return TRUE;
 }
 
@@ -361,6 +364,7 @@ int print_as_tree(const char* filename)
         }
         i++;
     }
+    fclose(fstream);
     return TRUE;
 }
 

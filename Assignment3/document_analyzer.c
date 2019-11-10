@@ -90,6 +90,7 @@ int load_document(const char* document)
 {
     FILE* fstream;
     content content;
+    int c;
     char* pointer_to_add;
     size_t line_len;
     size_t paragraph_count;
@@ -112,6 +113,11 @@ int load_document(const char* document)
     if (fstream == NULL) {
         return FALSE;
     }
+    c = fgetc(fstream);
+    if (c == -1) {
+        return FALSE;
+    }
+    rewind(fstream);
 
     content.char_arr = (char*)malloc(CONTENT_INIT_LENGTH * sizeof(char));
     content.length = CONTENT_INIT_LENGTH;
@@ -128,11 +134,6 @@ int load_document(const char* document)
         line_len = strlen(line);
         strncpy(pointer_to_add, line, line_len);
         content.remain_buffer -= line_len;
-    }
-
-    if (content.remain_buffer == content.length) {
-        free(content.char_arr);
-        return TRUE;
     }
 
     paragraph_count = count_paragraphs(content.char_arr);

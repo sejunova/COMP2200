@@ -114,7 +114,7 @@ int load_document(const char* document)
         return FALSE;
     }
     c = fgetc(fstream);
-    if (c == -1) {
+    if (c < 0) {
         fclose(fstream);
         return FALSE;
     }
@@ -354,7 +354,11 @@ int print_as_tree(const char* filename)
             fprintf(fstream, "    Sentence %zu:\n", j);
             k = 0;
             while (s_document[i][j][k] != NULL) {
-                fprintf(fstream, "        %s\n", s_document[i][j][k]);
+                if (s_document[i + 1] == NULL && s_document[i][j + 1] == NULL && s_document[i][j][k + 1] == NULL) {
+                    fprintf(fstream, "        %s", s_document[i][j][k]);
+                } else {
+                    fprintf(fstream, "        %s\n", s_document[i][j][k]);
+                }
                 k++;
             }
             j++;

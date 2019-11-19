@@ -33,5 +33,6 @@ size_t get_count(todo_list_t* todo_list);
 
 bool is_empty(todo_list_t* todo_list);
 
-#endif /* TODO_LIST_H */
+void print_task(todo_list_t* todo_list);
 
+#endif /* TODO_LIST_H */

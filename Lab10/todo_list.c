@@ -12,6 +12,9 @@ todo_list_t* init_todo_list_malloc(size_t max_size)
 
 void dispose(todo_list_t* todo_list)
 {
+    if (todo_list == NULL) {
+        return;
+    }
     node_t* next;
     node_t* p = todo_list->head;
     while (p != NULL) {
@@ -25,6 +28,9 @@ void dispose(todo_list_t* todo_list)
 
 bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 {
+    if (todo_list == NULL) {
+        return false;
+    }
     node_t* curr;
     node_t* prev = NULL;
     node_t* new_node;
@@ -63,6 +69,10 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 
 bool complete_todo(todo_list_t* todo_list)
 {
+    if (todo_list == NULL) {
+        return false;
+    }
+
     node_t* p;
     if (todo_list->cur_size == 0) {
         return false;
@@ -78,6 +88,10 @@ bool complete_todo(todo_list_t* todo_list)
 
 const char* peek_or_null(todo_list_t* todo_list)
 {
+    if (todo_list == NULL) {
+        return NULL;
+    }
+
     if (todo_list->cur_size == 0) {
         return NULL;
     }
@@ -86,12 +100,33 @@ const char* peek_or_null(todo_list_t* todo_list)
 
 size_t get_count(todo_list_t* todo_list)
 {
+    if (todo_list == NULL) {
+        return 0;
+    }
+
     return todo_list->cur_size;
 }
 
 bool is_empty(todo_list_t* todo_list)
-{
+{    if (todo_list == NULL) {
+        return false;
+    }
+
     return todo_list->cur_size == 0 ? true : false;
 }
+
+void print_task(todo_list_t* todo_list)
+{
+
+    node_t* p = todo_list->head;
+    printf("%s -> ", "head");
+
+    while (p != NULL) {
+        printf("%s -> ", p->task);
+        p = p->next;
+    }
+    printf("%s", "NULL");
+}
+
 
 

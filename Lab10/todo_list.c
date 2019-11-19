@@ -45,7 +45,7 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 
     curr = todo_list->head;
     while (curr != NULL) {
-        if (priority >= curr->priority) {
+        if (priority > curr->priority) {
             break;
         }
         prev = curr;
@@ -108,8 +108,9 @@ size_t get_count(todo_list_t* todo_list)
 }
 
 bool is_empty(todo_list_t* todo_list)
-{    if (todo_list == NULL) {
-        return false;
+{
+    if (todo_list == NULL) {
+        return true;
     }
 
     return todo_list->cur_size == 0 ? true : false;
@@ -127,6 +128,4 @@ void print_task(todo_list_t* todo_list)
     }
     printf("%s", "NULL");
 }
-
-
 

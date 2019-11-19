@@ -17,7 +17,7 @@ int main(void)
     assert(add_todo(todo_list, 59, "F"));
     assert(add_todo(todo_list, 60, "G"));
     assert(add_todo(todo_list, 55, "H"));
-    assert(add_todo(todo_list, 22, "I"));
+    assert(add_todo(todo_list, 2, "I"));
 
     assert(get_count(todo_list) == 9);
     assert(!is_empty(todo_list));
@@ -27,7 +27,9 @@ int main(void)
     assert(get_count(todo_list) == 9);
 
     assert(strcmp("G", peek_or_null(todo_list)) == 0);
+    assert(get_count(todo_list) == 9);
     assert(complete_todo(todo_list));
+    assert(get_count(todo_list) == 8);
 
     assert(strcmp("F", peek_or_null(todo_list)) == 0);
     assert(complete_todo(todo_list));
@@ -41,9 +43,6 @@ int main(void)
     assert(strcmp("B", peek_or_null(todo_list)) == 0);
     assert(complete_todo(todo_list));
 
-    assert(strcmp("I", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
-
     assert(strcmp("E", peek_or_null(todo_list)) == 0);
     assert(complete_todo(todo_list));
 
@@ -53,9 +52,13 @@ int main(void)
     assert(strcmp("C", peek_or_null(todo_list)) == 0);
     assert(complete_todo(todo_list));
 
+    assert(strcmp("I", peek_or_null(todo_list)) == 0);
+    assert(complete_todo(todo_list));
+
     assert(is_empty(todo_list));
     assert(!complete_todo(todo_list));
     assert(peek_or_null(todo_list) == NULL);
+    assert(todo_list->head == NULL);
 
     dispose(todo_list);
 

@@ -70,6 +70,7 @@ bool complete_todo(todo_list_t* todo_list)
 
     p = todo_list->head;
     todo_list->head = p->next;
+    free(p->task);
     free(p);
     todo_list->cur_size--;
     return true;

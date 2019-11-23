@@ -125,6 +125,7 @@ void destroy(hashmap_t* hashmap)
             p = next;
         }
     }
+    free(hashmap->plist);
     free(hashmap);
 }
 

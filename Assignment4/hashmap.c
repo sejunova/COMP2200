@@ -24,7 +24,7 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     if (hashmap->plist[index] == NULL) {
         hashmap->plist[index] = (node_t*)malloc(sizeof(node_t));
         p = hashmap->plist[index];
-        p->key = (char*)malloc(strlen(key) * sizeof(char));
+        p->key = (char*)malloc((strlen(key) + 1) * sizeof(char));
         strcpy(p->key, key);
         p->value = value;
         p->next = NULL;
@@ -43,7 +43,7 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     }
     p->next = (node_t*)malloc(sizeof(node_t));
     p = p->next;
-    p->key = (char*)malloc(strlen(key) * sizeof(char));
+    p->key = (char*)malloc((strlen(key) + 1) * sizeof(char));
     strcpy(p->key, key);
     p->value = value;
     p->next = NULL;

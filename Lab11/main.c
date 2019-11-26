@@ -1,64 +1,104 @@
-#include <stdio.h>
-#include <assert.h>
 #include <string.h>
-#include "todo_list.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "user.h"
+#include "data_store.h"
+
+user_t** get_test_users_malloc();
+void destroy_users(user_t** users);
 
 int main(void)
 {
-    todo_list_t* todo_list = init_todo_list_malloc(9);
+    remove("log.txt");
 
-    assert(is_empty(todo_list));
+    user_t** users = get_test_users_malloc();
 
-    assert(add_todo(todo_list, 10, "A"));
-    assert(add_todo(todo_list, 23, "B"));
-    assert(add_todo(todo_list, 3, "C"));
-    assert(add_todo(todo_list, 34, "D"));
-    assert(add_todo(todo_list, 20, "E"));
-    assert(add_todo(todo_list, 59, "F"));
-    assert(add_todo(todo_list, 60, "G"));
-    assert(add_todo(todo_list, 55, "H"));
-    assert(add_todo(todo_list, 22, "I"));
+    user_t* user = get_user_by_id_or_null(users, 2);
 
-    assert(get_count(todo_list) == 9);
-    assert(!is_empty(todo_list));
+    assert(user->id == 2);
+    assert(strcmp(user->username, "user2") == 0);
+    assert(strcmp(user->email, "email2@pocustudent.academy") == 0);
+    assert(strcmp(user->password, "password2") == 0);
 
-    assert(!add_todo(todo_list, -5, "J"));
+    user = get_user_by_username_or_null(users, "user5");
 
-    assert(get_count(todo_list) == 9);
+    assert(user->id == 5);
+    assert(strcmp(user->username, "user5") == 0);
+    assert(strcmp(user->email, "email5@pocustudent.academy") == 0);
+    assert(strcmp(user->password, "password5") == 0);
 
-    assert(strcmp("G", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    assert(!update_email(users, 20, "someemail@email.com"));
+    assert(!update_password(users, 20, "randompassword"));
 
-    assert(strcmp("F", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    const char* new_email = "n@gmail.com";
+    const char* new_password = "n";
 
-    assert(strcmp("H", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    assert(update_email(users, 2, new_email));
+    assert(update_password(users, 2, new_password));
 
-    assert(strcmp("D", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    new_email = "ne@gmail.com";
+    new_password = "ne";
 
-    assert(strcmp("B", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    assert(update_email(users, 2, new_email));
+    assert(update_password(users, 2, new_password));
 
-    assert(strcmp("I", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    new_email = "newemail@gmail.com";
+    new_password = "newpasswordishere";
 
-    assert(strcmp("E", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    assert(update_email(users, 2, new_email));
+    assert(update_password(users, 2, new_password));
 
-    assert(strcmp("A", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    user = get_user_by_id_or_null(users, 2);
 
-    assert(strcmp("C", peek_or_null(todo_list)) == 0);
-    assert(complete_todo(todo_list));
+    assert(user->id == 2);
+    assert(strcmp(user->username, "user2") == 0);
+    assert(strcmp(user->email, new_email) == 0);
+    assert(strcmp(user->password, new_password) == 0);
 
-    assert(is_empty(todo_list));
-    assert(!complete_todo(todo_list));
-    assert(peek_or_null(todo_list) == NULL);
-
-    dispose(todo_list);
-
+    destroy_users(users);
     return 0;
+}
+
+user_t** get_test_users_malloc()
+{
+    user_t** users = malloc(sizeof(user_t*) * 11);
+    size_t i = 0;
+
+    for (i = 0; i < 10; ++i) {
+        char username[51];
+        char password[51];
+        char email[51];
+
+        sprintf(username, "user%d", i);
+        sprintf(password, "password%d", i);
+        sprintf(email, "email%d@pocustudent.academy", i);
+
+        user_t* user = malloc(sizeof(user_t));
+        user->id = i;
+        strcpy(user->username, username);
+        strcpy(user->email, email);
+        strcpy(user->password, password);
+
+        users[i] = user;
+    }
+
+    users[i] = NULL;
+
+    return users;
+}
+
+void destroy_users(user_t** users)
+{
+    if (users != NULL) {
+        user_t** u = users;
+
+        while (*u != NULL) {
+            free(*u);
+            u++;
+        }
+
+        free(users);
+    }
 }
 

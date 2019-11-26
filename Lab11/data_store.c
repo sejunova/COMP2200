@@ -33,7 +33,7 @@ void encrypt_password(char* dest, const char* org)
 user_t* get_user_by_id_or_null(user_t** users_or_null, size_t id)
 {
     user_t** p = users_or_null;
-    if (*p == NULL) {
+    if (p == NULL || *p == NULL) {
         return NULL;
     }
 
@@ -49,7 +49,7 @@ user_t* get_user_by_id_or_null(user_t** users_or_null, size_t id)
 user_t* get_user_by_username_or_null(user_t** users_or_null, const char* username)
 {
     user_t** p = users_or_null;
-    if (*p == NULL) {
+    if (p == NULL || *p == NULL) {
         return NULL;
     }
 
@@ -67,7 +67,7 @@ bool update_email(user_t** users_or_null, size_t id, const char* email)
     user_t** p = users_or_null;
     FILE* fstream;
     char line[200];
-    if (*p == NULL) {
+    if (p == NULL || *p == NULL) {
         return false;
     }
 
@@ -98,7 +98,7 @@ bool update_password(user_t** users_or_null, size_t id, const char* password)
     user_t** p = users_or_null;
     FILE* fstream;
     char line[200];
-    if (*p == NULL) {
+    if (p == NULL || *p == NULL) {
         return false;
     }
 

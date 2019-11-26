@@ -6,7 +6,6 @@ void encrypt_email(char* dest, const char* org)
 {
     int i = (int)(strchr(org, '@') - org);
     strcpy(dest, org);
-    size_t dest_len = strlen(org);
     if (i == 1) {
         dest[0] = '*';
     } else if (i == 2) {
